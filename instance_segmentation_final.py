@@ -6,12 +6,28 @@ import imutils
 # load the COCO class labels our Mask R-CNN was trained on
 
 #All 90 classes are listed in this text file, one per line.
-labelsPath = os.path.sep.join(["mask-rcnn-coco","object_detection_classes_coco.txt"])
-LABELS = open(labelsPath).read().strip().split("\n")
-#Mask R-CNN model weights. The weights are pre-trained on the COCO dataset
-weightsPath = os.path.sep.join(["mask-rcnn-coco","frozen_inference_graph.pb"])
-#Mask R-CNN model configuration
-configPath = os.path.sep.join(["mask-rcnn-coco", "mask_rcnn_inception_v2_coco_2018_01_28.pbtxt"])
+# labelsPath = os.path.sep.join(["mask-rcnn-coco","object_detection_classes_coco.txt"])
+# LABELS = open(labelsPath).read().strip().split("\n")
+# #Mask R-CNN model weights. The weights are pre-trained on the COCO dataset
+# weightsPath = os.path.sep.join(["mask-rcnn-coco","frozen_inference_graph.pb"])
+# #Mask R-CNN model configuration
+# configPath = os.path.sep.join(["mask-rcnn-coco", "mask_rcnn_inception_v2_coco_2018_01_28.pbtxt"])
+labelsPath = "mask-rcnn-coco/object_detection_classes_coco.txt"
+LABELS = []
+with open(labelsPath) as f:
+    LABELS = f.read().strip().split("\n")
+print(LABELS)
+# load the set of colors that will be used when visualizing a given instance segmentation
+colorsPath = "mask-rcnn-coco/colors.txt"
+COLORS = []
+with open(colorsPath) as f:
+    COLORS = f.read().strip().split("\n")
+COLORS = [np.array(c.split(",")).astype("int") for c in COLORS]
+COLORS = np.array(COLORS, dtype="uint8")
+print(COLORS)
+# derive the paths to the Mask R-CNN weights and model configuration
+weightsPath = "mask-rcnn-coco/frozen_inference_graph.pb"
+configPath = "mask-rcnn-coco/mask_rcnn_inception_v2_coco_2018_01_28.pbtxt"
 
 print("Loading Mask R-CNN from disk...")
 net = cv2.dnn.readNetFromTensorflow(weightsPath, configPath)
